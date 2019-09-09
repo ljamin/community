@@ -17,7 +17,7 @@ import java.util.Currency;
 import java.util.UUID;
 
 @Controller
-public class AuthorizeComtroller {
+public class AuthorizeController {
 
     @Autowired
     private GithubProvider githubProvider;
