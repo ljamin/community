@@ -1,8 +1,8 @@
 package com.ljm.community.provider;
 
 import com.alibaba.fastjson.JSON;
-import com.ljm.community.POJO.AccessToken;
-import com.ljm.community.POJO.GithubUesr;
+import com.ljm.community.dto.AccessTokenDTO;
+import com.ljm.community.dto.GithubUesr;
 import okhttp3.*;
 import org.springframework.stereotype.Component;
 
@@ -11,10 +11,10 @@ import java.io.IOException;
 //@Component：将当前的类初始化到spring容器的上下文
 @Component
 public class GithubProvider {
-    public String getAccessToken(AccessToken accessToken){
+    public String getAccessToken(AccessTokenDTO accessTokenDTO){
        MediaType mediaType = MediaType.get("application/json; charset=utf-8");
        OkHttpClient client = new OkHttpClient();
-        RequestBody body = RequestBody.create(JSON.toJSONBytes(accessToken),mediaType);
+        RequestBody body = RequestBody.create(JSON.toJSONBytes(accessTokenDTO),mediaType);
         Request request = new Request.Builder()
                 .url("https://github.com/login/oauth/access_token")
                 .post(body)

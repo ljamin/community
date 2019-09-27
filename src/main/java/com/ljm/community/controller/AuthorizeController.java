@@ -1,7 +1,7 @@
 package com.ljm.community.controller;
 
-import com.ljm.community.POJO.AccessToken;
-import com.ljm.community.POJO.GithubUesr;
+import com.ljm.community.dto.AccessTokenDTO;
+import com.ljm.community.dto.GithubUesr;
 import com.ljm.community.mapper.UserMapper;
 import com.ljm.community.model.User;
 import com.ljm.community.provider.GithubProvider;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Currency;
 import java.util.UUID;
 
 @Controller
@@ -35,13 +34,13 @@ public class AuthorizeController {
                            HttpServletResponse response){
         System.out.println(code);
         System.out.println(state);
-        AccessToken accessToken = new AccessToken();
-        accessToken.setClient_id(clientId);
-        accessToken.setClient_secret(clientSecret);
-        accessToken.setCode(code);
-        accessToken.setRedirect_uri(redirectUri);
-        accessToken.setState(state);
-        String accessToken1 = githubProvider.getAccessToken(accessToken);
+        AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
+        accessTokenDTO.setClient_id(clientId);
+        accessTokenDTO.setClient_secret(clientSecret);
+        accessTokenDTO.setCode(code);
+        accessTokenDTO.setRedirect_uri(redirectUri);
+        accessTokenDTO.setState(state);
+        String accessToken1 = githubProvider.getAccessToken(accessTokenDTO);
         GithubUesr githubUser = githubProvider.getGithubUser(accessToken1);
         if(githubUser!=null){
             User user = new User();
@@ -52,6 +51,7 @@ public class AuthorizeController {
             user.setGmtCreate(String.valueOf(System.currentTimeMillis()));
             user.setGmtModified(user.getGmtCreate());
             user.setBio(githubUser.getBio());
+            user.setAvatarUrl(githubUser.getAvatarUrl());
             userMapper.insert(user);
             response.addCookie(new Cookie("token",token));
            /* //登录成功，写cookie和session
